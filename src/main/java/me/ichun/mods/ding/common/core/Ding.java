@@ -20,16 +20,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
+import java.io.File;
+import java.util.Locale;
+
 @Mod(modid = "ding", name="Ding",
-        version = Ding.version,
+        version = Ding.VERSION,
         clientSideOnly = true,
         acceptableRemoteVersions = "*",
-        dependencies = "required-after:Forge@[12.16.0.1810,)",
-        acceptedMinecraftVersions = "[1.9.4,1.10.2]"
+        dependencies = "required-after:forge@[13.19.0.2141,)",
+        acceptedMinecraftVersions = "[1.11,1.12)"
 )
 public class Ding
 {
-    public static final String version = "1.0.1";
+    public static final String VERSION = "1.0.1";
 
     public static String name = "entity.experience_orb.pickup";
     public static double pitch = 1.0D;
