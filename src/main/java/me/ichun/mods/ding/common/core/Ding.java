@@ -26,7 +26,7 @@ import org.apache.logging.log4j.Logger;
         clientSideOnly = true,
         acceptableRemoteVersions = "*",
         dependencies = "required-after:forge@[13.19.0.2141,)",
-        acceptedMinecraftVersions = "[1.12,1.12.1)"
+        acceptedMinecraftVersions = "[1.12,1.13)"
 )
 public class Ding
 {
