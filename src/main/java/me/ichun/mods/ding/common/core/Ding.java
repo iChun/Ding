@@ -19,16 +19,14 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.util.Locale;
-
-@Mod(modid = "ding", name="Ding",
+@Mod(modid = "ding", name = "Ding",
         version = Ding.VERSION,
         clientSideOnly = true,
         acceptableRemoteVersions = "*",
         dependencies = "required-after:forge@[13.19.0.2141,)",
-        acceptedMinecraftVersions = "[1.11,1.12)"
+        acceptedMinecraftVersions = "[1.12,1.12.1)"
 )
 public class Ding
 {
@@ -44,13 +42,17 @@ public class Ding
 
     @Instance("ding")
     public static Ding instance;
+    private static Logger logger;
 
     public static boolean played = false;
     public static boolean playWorld = false;
 
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+        logger = event.getModLog();
+
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
 
@@ -86,7 +88,7 @@ public class Ding
                 }
                 else
                 {
-                    FMLLog.log("Ding", Level.WARN, "Could not find sound: %s", new ResourceLocation(name));
+                    logger.log(Level.WARN, "Could not find sound: %s", new ResourceLocation(name));
                 }
             }
         }
@@ -103,7 +105,7 @@ public class Ding
     @SideOnly(Side.CLIENT)
     public void onWorldTick(TickEvent.WorldTickEvent event)
     {
-        if(playWorld && event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().thePlayer != null && (Minecraft.getMinecraft().thePlayer.ticksExisted > 20 || Minecraft.getMinecraft().isGamePaused()))
+        if(playWorld && event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().player != null && (Minecraft.getMinecraft().player.ticksExisted > 20 || Minecraft.getMinecraft().isGamePaused()))
         {
             playWorld = false;
             if(playOn == 2 || playOn == 3)
