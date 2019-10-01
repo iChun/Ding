@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -30,7 +31,7 @@ import org.apache.logging.log4j.Logger;
 )
 public class Ding
 {
-    public static final String VERSION = "1.0.1";
+    public static final String VERSION = "1.0.2";
 
     public static String name = "entity.experience_orb.pickup";
     public static double pitch = 1.0D;
@@ -72,7 +73,7 @@ public class Ding
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public void onGuiOpen(GuiOpenEvent event)
     {
@@ -117,7 +118,7 @@ public class Ding
                 }
                 else
                 {
-                    FMLLog.log("Ding", Level.WARN, "Could not find sound: %s", new ResourceLocation(nameWorld));
+                    logger.log(Level.WARN, "Could not find sound: %s", new ResourceLocation(nameWorld));
                 }
             }
         }
