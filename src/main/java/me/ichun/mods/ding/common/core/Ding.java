@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -48,6 +49,7 @@ public class Ding
     public static Ding instance;
     private static Logger logger;
 
+    public static boolean postInit = false;
     public static boolean played = false;
     public static boolean playWorld = false;
 
@@ -77,6 +79,12 @@ public class Ding
     }
 
     @EventHandler
+    public void postInit(FMLPostInitializationEvent event)
+    {
+        postInit = true;
+    }
+
+    @EventHandler
     public void onFingerprintViolation(FMLFingerprintViolationEvent event)
     {
         if(event.getSource() != null && event.getSource().isFile())
@@ -89,7 +97,7 @@ public class Ding
     @SideOnly(Side.CLIENT)
     public void onGuiOpen(GuiOpenEvent event)
     {
-        if(event.getGui() instanceof GuiMainMenu && !played)
+        if(postInit && event.getGui() instanceof GuiMainMenu && !played)
         {
             played = true;
             if(playOn == 1 || playOn == 3)
