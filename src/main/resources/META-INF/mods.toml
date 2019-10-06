@@ -1,0 +1,26 @@
+modLoader="javafml"
+loaderVersion="[28,)" #forge version dep
+issueTrackerURL="https://github.com/iChun/Ding/issues"
+
+[[mods]]
+    modId="ding"
+    version="${file.jarVersion}" #mandatory
+    displayName="Ding"
+    displayURL="https://ichun.me/mods/ding/"
+    authors="iChun"
+    description='''
+    Plays a sound once the client has loaded to the main menu or loaded the world
+    '''
+
+[[dependencies.ding]]
+    modId="forge"
+    mandatory=true
+    versionRange="[28,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.ding]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.14.4]"
+    ordering="NONE"
+    side="BOTH"
