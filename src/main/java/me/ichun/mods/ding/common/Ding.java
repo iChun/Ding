@@ -59,13 +59,13 @@ public class Ding
 
     public class Config
     {
-        public ForgeConfigSpec.ConfigValue<String> name;
-        public ForgeConfigSpec.DoubleValue pitch;
+        public final ForgeConfigSpec.ConfigValue<String> name;
+        public final ForgeConfigSpec.DoubleValue pitch;
 
-        public ForgeConfigSpec.ConfigValue<String> nameWorld;
-        public ForgeConfigSpec.DoubleValue pitchWorld;
+        public final ForgeConfigSpec.ConfigValue<String> nameWorld;
+        public final ForgeConfigSpec.DoubleValue pitchWorld;
 
-        public ForgeConfigSpec.IntValue playOn;
+        public final ForgeConfigSpec.IntValue playOn;
 
         public Config(ForgeConfigSpec.Builder builder)
         {
