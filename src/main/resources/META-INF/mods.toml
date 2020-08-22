@@ -1,6 +1,7 @@
 modLoader="javafml"
 loaderVersion="[32,)" #forge version dep
 issueTrackerURL="https://github.com/iChun/Ding/issues"
+license="LGPL-3.0"
 
 [[mods]]
     modId="ding"

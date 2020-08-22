@@ -26,7 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(Ding.MOD_ID)
-public class Ding
+public final class Ding
 {
     public static final String MOD_ID = "ding";
     public static final String MOD_NAME = "Ding";
@@ -58,22 +58,19 @@ public class Ding
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, configBuilder.build(), MOD_ID + ".toml");
     }
 
-    private void finishLoading(FMLLoadCompleteEvent event)
+    private void finishLoading(final FMLLoadCompleteEvent event)
     {
         EventHandler.postInit = true;
     }
 
-    public class Config
+    public static class Config
     {
-        public final ForgeConfigSpec.ConfigValue<String> name;
-        public final ForgeConfigSpec.DoubleValue pitch;
-
-        public final ForgeConfigSpec.ConfigValue<String> nameWorld;
-        public final ForgeConfigSpec.DoubleValue pitchWorld;
+        public final ForgeConfigSpec.ConfigValue<String> name, nameWorld;
+        public final ForgeConfigSpec.DoubleValue pitch, pitchWorld;
 
         public final ForgeConfigSpec.IntValue playOn;
 
-        public Config(ForgeConfigSpec.Builder builder)
+        public Config(final ForgeConfigSpec.Builder builder)
         {
             builder.comment("Configs related to how ding works").push("ding");
 
@@ -102,21 +99,19 @@ public class Ding
     @Mod.EventBusSubscriber(Dist.CLIENT)
     public static class EventHandler
     {
-        public static boolean postInit;
-        public static boolean played;
-        public static boolean playWorld;
+        public static boolean postInit, played, playWorld;
 
         @SubscribeEvent
-        public static void onGuiOpen(GuiOpenEvent event)
+        public static void onGuiOpen(final GuiOpenEvent event)
         {
             if(postInit && event.getGui() instanceof MainMenuScreen && !played)
             {
                 played = true;
-                int playOn = config.playOn.get();
+                final int playOn = config.playOn.get();
                 if((playOn & 1) > 0)
                 {
-                    String name = config.name.get();
-                    SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(name));
+                    final String name = config.name.get();
+                    final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(name));
                     if(sound != null)
                     {
                         Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(sound, config.pitch.get().floatValue()));
@@ -130,25 +125,27 @@ public class Ding
         }
 
         @SubscribeEvent
-        public static void onClientLoggedInEvent(ClientPlayerNetworkEvent.LoggedInEvent event)
+        public static void onClientLoggedInEvent(final ClientPlayerNetworkEvent.LoggedInEvent event)
         {
             playWorld = true;
         }
 
         @SubscribeEvent
-        public static void onWorldTick(TickEvent.WorldTickEvent event)
+        public static void onWorldTick(final TickEvent.WorldTickEvent event)
         {
-            if(playWorld && event.phase == TickEvent.Phase.END && Minecraft.getInstance().player != null && (Minecraft.getInstance().player.ticksExisted > 20 || Minecraft.getInstance().isGamePaused()))
+            final Minecraft mcInstance = Minecraft.getInstance();
+
+            if(playWorld && event.phase == TickEvent.Phase.END && mcInstance.player != null && (mcInstance.player.ticksExisted > 20 || mcInstance.isGamePaused()))
             {
                 playWorld = false;
-                int playOn = config.playOn.get();
+                final int playOn = config.playOn.get();
                 if((playOn & 2) > 0)
                 {
-                    String nameWorld = config.nameWorld.get();
-                    SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(nameWorld));
+                    final String nameWorld = config.nameWorld.get();
+                    final SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(nameWorld));
                     if(sound != null)
                     {
-                        Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(sound, config.pitchWorld.get().floatValue()));
+                        mcInstance.getSoundHandler().play(SimpleSound.master(sound, config.pitchWorld.get().floatValue()));
                     }
                     else
                     {
