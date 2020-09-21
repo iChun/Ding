@@ -1,14 +1,17 @@
 package me.ichun.mods.ding.common;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -61,6 +64,10 @@ public class Ding
     private void finishLoading(FMLLoadCompleteEvent event)
     {
         EventHandler.postInit = true;
+        if(config.playOnResourcesReload.get())
+        {
+            MinecraftForge.EVENT_BUS.addListener(this::onClientTick);
+        }
     }
 
     public class Config
@@ -71,7 +78,14 @@ public class Ding
         public final ForgeConfigSpec.ConfigValue<String> nameWorld;
         public final ForgeConfigSpec.DoubleValue pitchWorld;
 
-        public final ForgeConfigSpec.IntValue playOn;
+        public final ForgeConfigSpec.ConfigValue<String> nameResourcesReload;
+        public final ForgeConfigSpec.DoubleValue pitchResourcesReload;
+
+        public final ForgeConfigSpec.BooleanValue playOnLoad;
+        public final ForgeConfigSpec.BooleanValue playOnWorld;
+        public final ForgeConfigSpec.BooleanValue playOnResourcesReload;
+
+        public final ForgeConfigSpec.BooleanValue skipSoundEventCheck;
 
         public Config(ForgeConfigSpec.Builder builder)
         {
@@ -84,16 +98,35 @@ public class Ding
                     .translation("config.ding.prop.pitch.desc")
                     .defineInRange("pitch", 1D, 0D, 10D);
 
-            nameWorld = builder.comment("Resource Location based name of the sound file to play when the world finishes loading.\nEG: \"ui.button.click\" or \"entity.experience_orb.pickup\"\n\nThis can also be a mod sound if the mod is installed.\nEG: \"modname:modsound.boing\"\n\nIf you want to use external sounds, consider looking into the mod Additional Resources")
+            nameWorld = builder.comment("Resource Location based name of the sound file to play when the world finishes loading (after connecting to a server).\n\nLook at the \"name\" config for more details.")
                     .translation("config.ding.prop.nameWorld.desc")
                     .define("nameWorld", "entity.experience_orb.pickup");
-            pitchWorld = builder.comment("Pitch of the sound (when the world loads)")
+            pitchWorld = builder.comment("Pitch of the sound (when the world loads after connecting to a server)")
                     .translation("config.ding.prop.pitchWorld.desc")
                     .defineInRange("pitchWorld", 1D, 0D, 10D);
 
-            playOn = builder.comment("Play sound on...\n0 = Nothing (why install the mod though?)\n1 = MC load\n2 = World load\n3 = MC and World load")
-                    .translation("config.ding.prop.playOn.desc")
-                    .defineInRange("playOn", 1, 0, 3);
+            nameResourcesReload = builder.comment("Resource Location based name of the sound file to play when resources complete reloading.\n\nLook at the \"name\" config for more details.")
+                    .translation("config.ding.prop.nameResourcesReload.desc")
+                    .define("nameResourcesReload", "entity.experience_orb.pickup");
+            pitchResourcesReload = builder.comment("Pitch of the sound (when resources complete reloading)")
+                    .translation("config.ding.prop.pitchResourcesReloadResourcesReload.desc")
+                    .defineInRange("pitchResourcesReload", 1D, 0D, 10D);
+
+            playOnLoad = builder.comment("Play sound when the game loads.")
+                    .translation("config.ding.prop.playOnLoad.desc")
+                    .define("playOnLoad", true);
+
+            playOnWorld = builder.comment("Play sound when the world loads after connecting to a server.")
+                    .translation("config.ding.prop.playOnWorld.desc")
+                    .define("playOnWorld", false);
+
+            playOnResourcesReload = builder.comment("Play sound when resources complete reloading. Requires game to be restarted.")
+                    .translation("config.ding.prop.playOnResourcesReload.desc")
+                    .define("playOnResourcesReload", true);
+
+            skipSoundEventCheck = builder.comment("If Ding can't find the third party sound you added with other mods (EG: Additional Resources), try turning this on to skip that check.")
+                    .translation("config.ding.prop.skipSoundEventCheck.desc")
+                    .define("skipSoundEventCheck", false);
 
             builder.pop();
         }
@@ -112,19 +145,9 @@ public class Ding
             if(postInit && event.getGui() instanceof MainMenuScreen && !played)
             {
                 played = true;
-                int playOn = config.playOn.get();
-                if((playOn & 1) > 0)
+                if(config.playOnLoad.get())
                 {
-                    String name = config.name.get();
-                    SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(name));
-                    if(sound != null)
-                    {
-                        Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(sound, config.pitch.get().floatValue()));
-                    }
-                    else
-                    {
-                        LOGGER.log(Level.WARN, "Could not find sound: {}", new ResourceLocation(name));
-                    }
+                    Ding.playSound(config.name.get(), config.pitch.get().floatValue());
                 }
             }
         }
@@ -141,21 +164,50 @@ public class Ding
             if(playWorld && event.phase == TickEvent.Phase.END && Minecraft.getInstance().player != null && (Minecraft.getInstance().player.ticksExisted > 20 || Minecraft.getInstance().isGamePaused()))
             {
                 playWorld = false;
-                int playOn = config.playOn.get();
-                if((playOn & 2) > 0)
+                if(config.playOnWorld.get())
                 {
-                    String nameWorld = config.nameWorld.get();
-                    SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(nameWorld));
-                    if(sound != null)
-                    {
-                        Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(sound, config.pitchWorld.get().floatValue()));
-                    }
-                    else
-                    {
-                        LOGGER.log(Level.WARN, "Could not find sound: {}", new ResourceLocation(nameWorld));
-                    }
+                    Ding.playSound(config.nameWorld.get(), config.pitchWorld.get().floatValue());
                 }
             }
+        }
+    }
+
+    private boolean ignoreFirst = true;
+    private boolean hasLoadingGui = false;
+    private void onClientTick(TickEvent.ClientTickEvent event)
+    {
+        if(event.phase == TickEvent.Phase.END && config.playOnResourcesReload.get())
+        {
+            if(Minecraft.getInstance().loadingGui == null && hasLoadingGui)
+            {
+                if(ignoreFirst) //ignores the loss of the loading GUI when the game is launching
+                {
+                    ignoreFirst = false;
+                }
+                else if(config.playOnResourcesReload.get())
+                {
+                    Ding.playSound(config.nameResourcesReload.get(), config.pitchResourcesReload.get().floatValue());
+                }
+            }
+            hasLoadingGui = Minecraft.getInstance().loadingGui != null;
+        }
+    }
+
+    public static void playSound(String name, float pitch)
+    {
+        ResourceLocation rl = new ResourceLocation(name);
+        SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(rl);
+        if(sound != null)
+        {
+            Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(sound, pitch));
+        }
+        else if(config.skipSoundEventCheck.get())
+        {
+            Minecraft.getInstance().getSoundHandler().play(new SimpleSound(rl, SoundCategory.MASTER, 0.25F, pitch, false, 0, ISound.AttenuationType.NONE, 0.0D, 0.0D, 0.0D, true));
+        }
+        else
+        {
+            LOGGER.log(Level.WARN, "Could not find sound: {}", rl);
         }
     }
 }
