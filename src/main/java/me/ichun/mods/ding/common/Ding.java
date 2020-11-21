@@ -147,7 +147,7 @@ public class Ding
                 played = true;
                 if(config.playOnLoad.get())
                 {
-                    Ding.playSound(config.name.get(), config.pitch.get().floatValue());
+                    Client.playSound(config.name.get(), config.pitch.get().floatValue());
                 }
             }
         }
@@ -166,7 +166,7 @@ public class Ding
                 playWorld = false;
                 if(config.playOnWorld.get())
                 {
-                    Ding.playSound(config.nameWorld.get(), config.pitchWorld.get().floatValue());
+                    Client.playSound(config.nameWorld.get(), config.pitchWorld.get().floatValue());
                 }
             }
         }
@@ -186,28 +186,33 @@ public class Ding
                 }
                 else if(config.playOnResourcesReload.get())
                 {
-                    Ding.playSound(config.nameResourcesReload.get(), config.pitchResourcesReload.get().floatValue());
+                    Client.playSound(config.nameResourcesReload.get(), config.pitchResourcesReload.get().floatValue());
                 }
             }
             hasLoadingGui = Minecraft.getInstance().loadingGui != null;
         }
     }
 
-    public static void playSound(String name, float pitch)
-    {
-        ResourceLocation rl = new ResourceLocation(name);
-        SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(rl);
-        if(sound != null)
+    public static class Client {
+
+        public static void playSound(String name, float pitch)
         {
-            Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(sound, pitch));
-        }
-        else if(config.skipSoundEventCheck.get())
-        {
-            Minecraft.getInstance().getSoundHandler().play(new SimpleSound(rl, SoundCategory.MASTER, 0.25F, pitch, false, 0, ISound.AttenuationType.NONE, 0.0D, 0.0D, 0.0D, true));
-        }
-        else
-        {
-            LOGGER.log(Level.WARN, "Could not find sound: {}", rl);
+            ResourceLocation rl = new ResourceLocation(name);
+            SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(rl);
+            if(sound != null)
+            {
+                Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(sound, pitch));
+            }
+            else if(config.skipSoundEventCheck.get())
+            {
+                Minecraft.getInstance().getSoundHandler().play(new SimpleSound(rl, SoundCategory.MASTER, 0.25F, pitch, false, 0, ISound.AttenuationType.NONE, 0.0D, 0.0D, 0.0D, true));
+            }
+            else
+            {
+                LOGGER.log(Level.WARN, "Could not find sound: {}", rl);
+            }
         }
     }
+
+
 }
