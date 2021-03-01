@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.2.1'
+version = '1.3.0'
 group = 'ding'
 archivesBaseName = 'Ding-1.16.5'
 

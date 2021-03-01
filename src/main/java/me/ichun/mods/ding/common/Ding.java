@@ -75,18 +75,19 @@ public class Ding
     {
         public final ForgeConfigSpec.ConfigValue<String> name;
         public final ForgeConfigSpec.DoubleValue pitch;
+        public final ForgeConfigSpec.ConfigValue<String> category;
 
         public final ForgeConfigSpec.ConfigValue<String> nameWorld;
         public final ForgeConfigSpec.DoubleValue pitchWorld;
+        public final ForgeConfigSpec.ConfigValue<String> categoryWorld;
 
         public final ForgeConfigSpec.ConfigValue<String> nameResourcesReload;
         public final ForgeConfigSpec.DoubleValue pitchResourcesReload;
+        public final ForgeConfigSpec.ConfigValue<String> categoryResourcesReload;
 
         public final ForgeConfigSpec.BooleanValue playOnLoad;
         public final ForgeConfigSpec.BooleanValue playOnWorld;
         public final ForgeConfigSpec.BooleanValue playOnResourcesReload;
-
-        public final ForgeConfigSpec.BooleanValue skipSoundEventCheck;
 
         public Config(ForgeConfigSpec.Builder builder)
         {
@@ -98,6 +99,9 @@ public class Ding
             pitch = builder.comment("Pitch of the sound (when Minecraft loads)")
                     .translation("config.ding.prop.pitch.desc")
                     .defineInRange("pitch", 1D, 0D, 10D);
+            category = builder.comment("Sound category for the sound played when Minecraft finishes loading. EG: \"ambient\" or \"music\". Defaults to \"master\" if Ding cannot find your category.")
+                    .translation("config.ding.prop.category.desc")
+                    .define("category", "master");
 
             nameWorld = builder.comment("Resource Location based name of the sound file to play when the world finishes loading (after connecting to a server).\n\nLook at the \"name\" config for more details.")
                     .translation("config.ding.prop.nameWorld.desc")
@@ -105,6 +109,9 @@ public class Ding
             pitchWorld = builder.comment("Pitch of the sound (when the world loads after connecting to a server)")
                     .translation("config.ding.prop.pitchWorld.desc")
                     .defineInRange("pitchWorld", 1D, 0D, 10D);
+            categoryWorld = builder.comment("Sound category for the sound played when the world finishes loading (after connecting to a server). EG: \"ambient\" or \"music\". Defaults to \"master\" if Ding cannot find your category.")
+                    .translation("config.ding.prop.categoryWorld.desc")
+                    .define("categoryWorld", "master");
 
             nameResourcesReload = builder.comment("Resource Location based name of the sound file to play when resources complete reloading.\n\nLook at the \"name\" config for more details.")
                     .translation("config.ding.prop.nameResourcesReload.desc")
@@ -112,6 +119,9 @@ public class Ding
             pitchResourcesReload = builder.comment("Pitch of the sound (when resources complete reloading)")
                     .translation("config.ding.prop.pitchResourcesReloadResourcesReload.desc")
                     .defineInRange("pitchResourcesReload", 1D, 0D, 10D);
+            categoryResourcesReload = builder.comment("Sound category for the sound played when resources complete reloading. EG: \"ambient\" or \"music\". Defaults to \"master\" if Ding cannot find your category.")
+                    .translation("config.ding.prop.categoryResourcesReload.desc")
+                    .define("categoryResourcesReload", "master");
 
             playOnLoad = builder.comment("Play sound when the game loads.")
                     .translation("config.ding.prop.playOnLoad.desc")
@@ -124,10 +134,6 @@ public class Ding
             playOnResourcesReload = builder.comment("Play sound when resources complete reloading. Requires game to be restarted.")
                     .translation("config.ding.prop.playOnResourcesReload.desc")
                     .define("playOnResourcesReload", true);
-
-            skipSoundEventCheck = builder.comment("If Ding can't find the third party sound you added with other mods (EG: Additional Resources), try turning this on to skip that check.")
-                    .translation("config.ding.prop.skipSoundEventCheck.desc")
-                    .define("skipSoundEventCheck", false);
 
             builder.pop();
         }
@@ -148,7 +154,7 @@ public class Ding
                 played = true;
                 if(config.playOnLoad.get())
                 {
-                    Ding.playSound(config.name.get(), config.pitch.get().floatValue());
+                    Ding.playSound(config.name.get(), config.pitch.get().floatValue(), config.category.get());
                 }
             }
         }
@@ -167,7 +173,7 @@ public class Ding
                 playWorld = false;
                 if(config.playOnWorld.get())
                 {
-                    Ding.playSound(config.nameWorld.get(), config.pitchWorld.get().floatValue());
+                    Ding.playSound(config.nameWorld.get(), config.pitchWorld.get().floatValue(), config.categoryWorld.get());
                 }
             }
         }
@@ -187,7 +193,7 @@ public class Ding
                 }
                 else if(config.playOnResourcesReload.get())
                 {
-                    Ding.playSound(config.nameResourcesReload.get(), config.pitchResourcesReload.get().floatValue());
+                    Ding.playSound(config.nameResourcesReload.get(), config.pitchResourcesReload.get().floatValue(), config.categoryResourcesReload.get());
                 }
             }
             hasLoadingGui = Minecraft.getInstance().loadingGui != null;
@@ -195,21 +201,31 @@ public class Ding
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void playSound(String name, float pitch)
+    public static void playSound(String name, float pitch, String categoryName)
     {
         ResourceLocation rl = new ResourceLocation(name);
         SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(rl);
-        if(sound != null)
+        SoundCategory category = getCategoryByName(categoryName);
+
+        //if the sound doesn't exist we play a missing sound
+        Minecraft.getInstance().getSoundHandler().play(new SimpleSound(sound == null ? rl : sound.getName(), category, 0.25F, pitch, false, 0, ISound.AttenuationType.NONE, 0.0D, 0.0D, 0.0D, true));
+
+        if(sound == null)
         {
-            Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(sound, pitch));
+            LOGGER.log(Level.WARN, "Could not find sound but attempted to play anyway: {}", rl);
         }
-        else if(config.skipSoundEventCheck.get())
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static SoundCategory getCategoryByName(String name)
+    {
+        for(SoundCategory value : SoundCategory.values())
         {
-            Minecraft.getInstance().getSoundHandler().play(new SimpleSound(rl, SoundCategory.MASTER, 0.25F, pitch, false, 0, ISound.AttenuationType.NONE, 0.0D, 0.0D, 0.0D, true));
+            if(value.getName().equals(name))
+            {
+                return value;
+            }
         }
-        else
-        {
-            LOGGER.log(Level.WARN, "Could not find sound: {}", rl);
-        }
+        return SoundCategory.MASTER;
     }
 }
