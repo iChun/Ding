@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -193,6 +194,7 @@ public class Ding
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static void playSound(String name, float pitch)
     {
         ResourceLocation rl = new ResourceLocation(name);
