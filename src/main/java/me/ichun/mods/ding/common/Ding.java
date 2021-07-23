@@ -41,11 +41,11 @@ public class Ding
 
     public Ding()
     {
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             setupConfig();
             FMLJavaModLoadingContext.get().getModEventBus().addListener(this::finishLoading);
         });
-        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> LOGGER.log(Level.ERROR, "You are loading " + MOD_NAME + " on a server. " + MOD_NAME + " is a client only mod!"));
+        DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> LOGGER.log(Level.ERROR, "You are loading " + MOD_NAME + " on a server. " + MOD_NAME + " is a client only mod!"));
 
         //Make sure the mod being absent on the other network side does not cause the client to display the server as incompatible
         ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
