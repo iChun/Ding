@@ -1,12 +1,12 @@
 package me.ichun.mods.ding.common;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.screen.MainMenuScreen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -16,15 +16,14 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.FMLNetworkConstants;
+import net.minecraftforge.fmllegacy.network.FMLNetworkConstants;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,7 +47,7 @@ public class Ding
         DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> LOGGER.log(Level.ERROR, "You are loading " + MOD_NAME + " on a server. " + MOD_NAME + " is a client only mod!"));
 
         //Make sure the mod being absent on the other network side does not cause the client to display the server as incompatible
-        ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
+        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
     }
 
     private void setupConfig()
@@ -149,7 +148,7 @@ public class Ding
         @SubscribeEvent
         public static void onGuiOpen(GuiOpenEvent event)
         {
-            if(postInit && event.getGui() instanceof MainMenuScreen && !played)
+            if(postInit && event.getGui() instanceof TitleScreen && !played)
             {
                 played = true;
                 if(config.playOnLoad.get())
@@ -168,7 +167,7 @@ public class Ding
         @SubscribeEvent
         public static void onWorldTick(TickEvent.WorldTickEvent event)
         {
-            if(playWorld && event.phase == TickEvent.Phase.END && Minecraft.getInstance().player != null && (Minecraft.getInstance().player.ticksExisted > 20 || Minecraft.getInstance().isGamePaused()))
+            if(playWorld && event.phase == TickEvent.Phase.END && Minecraft.getInstance().player != null && (Minecraft.getInstance().player.tickCount > 20 || Minecraft.getInstance().isPaused()))
             {
                 playWorld = false;
                 if(config.playOnWorld.get())
@@ -185,7 +184,7 @@ public class Ding
     {
         if(event.phase == TickEvent.Phase.END && config.playOnResourcesReload.get())
         {
-            if(Minecraft.getInstance().loadingGui == null && hasLoadingGui)
+            if(Minecraft.getInstance().getOverlay() == null && hasLoadingGui)
             {
                 if(ignoreFirst) //ignores the loss of the loading GUI when the game is launching
                 {
@@ -196,7 +195,7 @@ public class Ding
                     Ding.playSound(config.nameResourcesReload.get(), config.pitchResourcesReload.get().floatValue(), config.categoryResourcesReload.get());
                 }
             }
-            hasLoadingGui = Minecraft.getInstance().loadingGui != null;
+            hasLoadingGui = Minecraft.getInstance().getOverlay() != null;
         }
     }
 
@@ -205,10 +204,10 @@ public class Ding
     {
         ResourceLocation rl = new ResourceLocation(name);
         SoundEvent sound = ForgeRegistries.SOUND_EVENTS.getValue(rl);
-        SoundCategory category = getCategoryByName(categoryName);
+        SoundSource category = getCategoryByName(categoryName);
 
         //if the sound doesn't exist we play a missing sound
-        Minecraft.getInstance().getSoundHandler().play(new SimpleSound(sound == null ? rl : sound.getName(), category, 0.25F, pitch, false, 0, ISound.AttenuationType.NONE, 0.0D, 0.0D, 0.0D, true));
+        Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(sound == null ? rl : sound.getLocation(), category, 0.25F, pitch, false, 0, SoundInstance.Attenuation.NONE, 0.0D, 0.0D, 0.0D, true));
 
         if(sound == null)
         {
@@ -217,15 +216,15 @@ public class Ding
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static SoundCategory getCategoryByName(String name)
+    public static SoundSource getCategoryByName(String name)
     {
-        for(SoundCategory value : SoundCategory.values())
+        for(SoundSource value : SoundSource.values())
         {
             if(value.getName().equals(name))
             {
                 return value;
             }
         }
-        return SoundCategory.MASTER;
+        return SoundSource.MASTER;
     }
 }
