@@ -207,7 +207,7 @@ public class Ding
         SoundSource category = getCategoryByName(categoryName);
 
         //if the sound doesn't exist we play a missing sound
-        Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(sound == null ? rl : sound.getLocation(), category, 0.25F, pitch, false, 0, SoundInstance.Attenuation.NONE, 0.0D, 0.0D, 0.0D, true));
+        Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(sound == null ? rl : sound.getLocation(), category, 0.25F, pitch, SoundInstance.createUnseededRandom(), false, 0, SoundInstance.Attenuation.NONE, 0.0D, 0.0D, 0.0D, true));
 
         if(sound == null)
         {
