@@ -18,10 +18,10 @@ issueTrackerURL="https://github.com/iChun/Ding/issues"
     mandatory=true
     versionRange="[37,)"
     ordering="NONE"
-    side="BOTH"
+    side="CLIENT"
 [[dependencies.ding]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.17,1.18)"
     ordering="NONE"
-    side="BOTH"
+    side="CLIENT"
