@@ -10,7 +10,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.client.event.ScreenOpenEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -146,7 +146,7 @@ public class Ding
         public static boolean playWorld;
 
         @SubscribeEvent
-        public static void onGuiOpen(ScreenOpenEvent event)
+        public static void onGuiOpen(ScreenEvent.Opening event)
         {
             if(postInit && event.getScreen() instanceof TitleScreen && !played)
             {
@@ -159,13 +159,13 @@ public class Ding
         }
 
         @SubscribeEvent
-        public static void onClientLoggedInEvent(ClientPlayerNetworkEvent.LoggedInEvent event)
+        public static void onClientLoggedInEvent(ClientPlayerNetworkEvent.LoggingIn event)
         {
             playWorld = true;
         }
 
         @SubscribeEvent
-        public static void onWorldTick(TickEvent.WorldTickEvent event)
+        public static void onWorldTick(TickEvent.LevelTickEvent event)
         {
             if(playWorld && event.phase == TickEvent.Phase.END && Minecraft.getInstance().player != null && (Minecraft.getInstance().player.tickCount > 20 || Minecraft.getInstance().isPaused()))
             {
