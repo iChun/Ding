@@ -172,7 +172,7 @@ processResources {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "${project.archives_base_name}",
+                "Specification-Title"     : "${project.mod_id}",
                 "Specification-Vendor"    : "iChun",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
