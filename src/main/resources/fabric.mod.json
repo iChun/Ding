@@ -6,7 +6,7 @@
   "name": "Ding",
   "description": "Plays a sound once the client has loaded to the main menu, a server, or resources",
   "authors": [
-    "iChun!"
+    "iChun"
   ],
   "contact": {
     "homepage": "https://github.com/iChun/Ding",

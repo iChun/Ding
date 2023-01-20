@@ -15,8 +15,8 @@ public class LoaderFabricClient extends Ding
         //register config
         ConfigFabric configFabric = new ConfigFabric();
         config = configFabric;
-        Config modConfig = new Config(MOD_ID, new String[]{MOD_ID}, configFabric);
-        modConfig.load();;
+        Config modConfig = new Config(MOD_ID, new String[]{}, configFabric);
+        modConfig.load();
         Runtime.getRuntime().addShutdownHook(new Thread(modConfig::save));
 
         //init event handler
