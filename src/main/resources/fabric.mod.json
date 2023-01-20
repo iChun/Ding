@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "ding",
+  "version": "${version}",
+
+  "name": "Ding",
+  "description": "Plays a sound once the client has loaded to the main menu, a server, or resources",
+  "authors": [
+    "iChun!"
+  ],
+  "contact": {
+    "homepage": "https://github.com/iChun/Ding",
+    "issues": "https://github.com/iChun/Ding/issues"
+  },
+
+  "license": "GNU Lesser General Public License v3.0",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "me.ichun.mods.ding.loader.fabric.LoaderFabricClient"
+    ]
+  },
+
+  "mixins": [
+    "ding.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.11",
+    "fabric-api": "*",
+    "minecraft": "~1.19.3",
+    "java": ">=17",
+    "completeconfig-base": ">=2.2.0"
+  }
+}
