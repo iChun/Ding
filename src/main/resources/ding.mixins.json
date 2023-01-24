@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "me.ichun.mods.ding.mixin",
   "compatibilityLevel": "JAVA_17",
+  "refmap": "ding.refmap.json",
   "mixins": [
   ],
   "client": [
