@@ -132,7 +132,7 @@ public class ConfigFabric extends Config
                 return "config.ding.cat.ding.world.desc";
             }
 
-            @ConfigEntry(nameKey = "config.ding.prop.playOnWorld.name", descriptionKey = "config.ding.prop.playOnWorld.desc", comment = "Play sound when the world loads after connecting to a server. Requires game to be restarted when changing this option.")
+            @ConfigEntry(nameKey = "config.ding.prop.playOnWorld.name", descriptionKey = "config.ding.prop.playOnWorld.desc", comment = "Play sound when the world loads after connecting to a server. Requires game to be restarted when changing this option.", requiresRestart = true)
             public boolean playOnWorld = false;
             @ConfigEntry(nameKey = "config.ding.prop.nameWorld.name", descriptionKey = "config.ding.prop.nameWorld.desc", comment = "Resource Location based name of the sound file to play when the world finishes loading (after connecting to a server).\n\nLook at the \"name\" config for more details.")
             public String nameWorld = "entity.experience_orb.pickup";
@@ -173,7 +173,7 @@ public class ConfigFabric extends Config
                 return "config.ding.cat.ding.resourcesReload.desc";
             }
 
-            @ConfigEntry(nameKey = "config.ding.prop.playOnResourcesReload.name", descriptionKey = "config.ding.prop.playOnResourcesReload.desc", comment = "Play sound when resources complete reloading. Requires game to be restarted when changing this option.")
+            @ConfigEntry(nameKey = "config.ding.prop.playOnResourcesReload.name", descriptionKey = "config.ding.prop.playOnResourcesReload.desc", comment = "Play sound when resources complete reloading. Requires game to be restarted when changing this option.", requiresRestart = true)
             public boolean playOnResourcesReload = true;
             @ConfigEntry(nameKey = "config.ding.prop.nameResourcesReload.name", descriptionKey = "config.ding.prop.nameResourcesReload.desc", comment = "Resource Location based name of the sound file to play when resources complete reloading.\n\nLook at the \"name\" config for more details.")
             public String nameResourcesReload = "entity.experience_orb.pickup";
