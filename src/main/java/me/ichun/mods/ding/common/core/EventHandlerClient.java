@@ -97,7 +97,7 @@ public abstract class EventHandlerClient
     {
         for(SoundSource value : SoundSource.values())
         {
-            if(value.getName().equals(name))
+            if(value.getName().equalsIgnoreCase(name))
             {
                 return value;
             }

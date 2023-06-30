@@ -1,5 +1,6 @@
 package me.ichun.mods.ding.mixin;
 
+import me.ichun.mods.ding.common.Ding;
 import me.ichun.mods.ding.common.core.EventHandlerClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.LoadingOverlay;
@@ -16,7 +17,7 @@ public abstract class MinecraftMixin
     @Inject(method = "setOverlay", at = @At("HEAD"))
     private void setOverlay(@Nullable Overlay overlay, CallbackInfo ci)
     {
-        if(!EventHandlerClient.postInit && overlay == null && ((Minecraft)(Object)this).getOverlay() instanceof LoadingOverlay)
+        if(!EventHandlerClient.postInit && Ding.modProxy != null && overlay == null && ((Minecraft)(Object)this).getOverlay() instanceof LoadingOverlay)
         {
             EventHandlerClient.postInit();
         }
