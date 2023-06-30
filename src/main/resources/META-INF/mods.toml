@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[44,)" #forge version dep
+loaderVersion="[45,)" #forge version dep
 license="GNU Lesser General Public License v3.0"
 issueTrackerURL="https://github.com/iChun/Ding/issues"
 
@@ -22,12 +22,12 @@ issueTrackerURL="https://github.com/iChun/Ding/issues"
 [[dependencies.ding]]
     modId="forge"
     mandatory=true
-    versionRange="[44,)"
+    versionRange="[45,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.ding]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.3,1.20)"
+    versionRange="[1.19.4,1.20)"
     ordering="NONE"
     side="BOTH"
