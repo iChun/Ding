@@ -1,12 +1,12 @@
 pluginManagement {
-	repositories {
-		maven {
-			name = 'Fabric'
-			url = 'https://maven.fabricmc.net/'
-		}
-		maven {
-			name = 'Forge'
-			url = 'https://maven.minecraftforge.net/'
+    repositories {
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+		maven { 
+            name = 'Forge'
+			url = 'https://maven.minecraftforge.net/' 
 		}
 		maven {
 			name = 'Parchment'
@@ -16,7 +16,11 @@ pluginManagement {
 			name = 'Spongepowered (Mixin)'
 			url = 'https://repo.spongepowered.org/repository/maven-public/'
 		}
-		mavenCentral()
-		gradlePluginPortal()
-	}
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.5.0'
 }
