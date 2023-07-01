@@ -19,6 +19,9 @@
   "entrypoints": {
     "client": [
       "me.ichun.mods.ding.loader.fabric.LoaderFabricClient"
+    ],
+    "modmenu": [
+      "me.ichun.mods.ding.loader.fabric.ModMenuIntegration"
     ]
   },
 
@@ -27,10 +30,10 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.11",
+    "fabricloader": ">=0.14.21",
     "fabric-api": "*",
-    "minecraft": "~1.19.4",
+    "minecraft": "1.20.x",
     "java": ">=17",
-    "completeconfig-base": ">=2.3.1"
+    "completeconfig-base": ">=2.4.0"
   }
 }
