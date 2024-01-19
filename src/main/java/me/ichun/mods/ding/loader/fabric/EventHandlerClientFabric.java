@@ -6,9 +6,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientHandshakePacketListenerImpl;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 
 public class EventHandlerClientFabric extends EventHandlerClient
 {
@@ -28,12 +25,6 @@ public class EventHandlerClientFabric extends EventHandlerClient
     public void hookIntoClientTick()
     {
         ClientTickEvents.END_CLIENT_TICK.register(this::onClientTick);
-    }
-
-    @Override
-    public SoundEvent getSoundEvent(ResourceLocation rl)
-    {
-        return BuiltInRegistries.SOUND_EVENT.get(rl);
     }
 
     public void onClientConnection(ClientHandshakePacketListenerImpl handler, Minecraft client)

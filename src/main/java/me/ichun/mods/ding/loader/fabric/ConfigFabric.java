@@ -92,17 +92,17 @@ public class ConfigFabric extends Config
                 return "cat.ding.load.desc";
             }
 
-            @ConfigEntry(nameKey = "prop.playOnLoad.name", descriptionKey = "prop.playOnLoad.desc", comment = "Play sound when the game loads.")
+            @ConfigEntry(nameKey = "prop.playOnLoad.name", descriptionKey = "prop.playOnLoad.desc", comment = Reference.PLAY_ON_LOAD_COMMENT)
             public boolean playOnLoad = true;
-            @ConfigEntry(nameKey = "prop.name.name", descriptionKey = "prop.name.desc", comment = "Resource Location based name of the sound file to play when Minecraft finishes loading.\nEG: \"ui.button.click\" or \"entity.experience_orb.pickup\"\n\nThis can also be a mod sound if the mod is installed.\nEG: \"modname:modsound.boing\"\n\nIf you want to use external sounds, consider looking into the mod Additional Resources")
+            @ConfigEntry(nameKey = "prop.name.name", descriptionKey = "prop.name.desc", comment = Reference.NAME_COMMENT)
             public String name = "entity.experience_orb.pickup";
-            @ConfigEntry(nameKey = "prop.volume.name", descriptionKey = "prop.volume.desc", comment = "Volume of the sound (when Minecraft loads)")
+            @ConfigEntry(nameKey = "prop.volume.name", descriptionKey = "prop.volume.desc", comment = Reference.VOLUME_COMMENT)
             @ConfigEntry.BoundedDouble(min = 0D, max = 10D)
             public double volume = 0.25D;
-            @ConfigEntry(nameKey = "prop.pitch.name", descriptionKey = "prop.pitch.desc", comment = "Pitch of the sound (when Minecraft loads)")
+            @ConfigEntry(nameKey = "prop.pitch.name", descriptionKey = "prop.pitch.desc", comment = Reference.PITCH_COMMENT)
             @ConfigEntry.BoundedDouble(min = 0D, max = 10D)
             public double pitch = 1D;
-            @ConfigEntry(nameKey = "prop.category.name", descriptionKey = "prop.category.desc", comment = "Sound category for the sound played when Minecraft finishes loading. EG: \"ambient\" or \"music\". Defaults to \"master\" if Ding cannot find your category.")
+            @ConfigEntry(nameKey = "prop.category.name", descriptionKey = "prop.category.desc", comment = Reference.CATEGORY_COMMENT)
             public String category = "master";
         }
 
@@ -133,17 +133,17 @@ public class ConfigFabric extends Config
                 return "cat.ding.world.desc";
             }
 
-            @ConfigEntry(nameKey = "prop.playOnWorld.name", descriptionKey = "prop.playOnWorld.desc", comment = "Play sound when the world loads after connecting to a server. Requires game to be restarted when changing this option.", requiresRestart = true)
+            @ConfigEntry(nameKey = "prop.playOnWorld.name", descriptionKey = "prop.playOnWorld.desc", comment = Reference.PLAY_ON_WORLD_COMMENT, requiresRestart = true)
             public boolean playOnWorld = false;
-            @ConfigEntry(nameKey = "prop.nameWorld.name", descriptionKey = "prop.nameWorld.desc", comment = "Resource Location based name of the sound file to play when the world finishes loading (after connecting to a server).\n\nLook at the \"name\" config for more details.")
+            @ConfigEntry(nameKey = "prop.nameWorld.name", descriptionKey = "prop.nameWorld.desc", comment = Reference.NAME_WORLD_COMMENT)
             public String nameWorld = "entity.experience_orb.pickup";
-            @ConfigEntry(nameKey = "prop.volumeWorld.name", descriptionKey = "prop.volumeWorld.desc", comment = "Volume of the sound (when the world loads after connecting to a server)")
+            @ConfigEntry(nameKey = "prop.volumeWorld.name", descriptionKey = "prop.volumeWorld.desc", comment = Reference.VOLUME_WORLD_COMMENT)
             @ConfigEntry.BoundedDouble(min = 0D, max = 10D)
             public double volumeWorld = 0.25D;
-            @ConfigEntry(nameKey = "prop.pitchWorld.name", descriptionKey = "prop.pitchWorld.desc", comment = "Pitch of the sound (when the world loads after connecting to a server)")
+            @ConfigEntry(nameKey = "prop.pitchWorld.name", descriptionKey = "prop.pitchWorld.desc", comment = Reference.PITCH_WORLD_COMMENT)
             @ConfigEntry.BoundedDouble(min = 0D, max = 10D)
             public double pitchWorld = 1D;
-            @ConfigEntry(nameKey = "prop.categoryWorld.name", descriptionKey = "prop.categoryWorld.desc", comment = "Sound category for the sound played when the world finishes loading (after connecting to a server). EG: \"ambient\" or \"music\". Defaults to \"master\" if Ding cannot find your category.")
+            @ConfigEntry(nameKey = "prop.categoryWorld.name", descriptionKey = "prop.categoryWorld.desc", comment = Reference.CATEGORY_WORLD_COMMENT)
             public String categoryWorld = "master";
         }
 
@@ -174,17 +174,17 @@ public class ConfigFabric extends Config
                 return "cat.ding.resourcesReload.desc";
             }
 
-            @ConfigEntry(nameKey = "prop.playOnResourcesReload.name", descriptionKey = "prop.playOnResourcesReload.desc", comment = "Play sound when resources complete reloading. Requires game to be restarted when changing this option.", requiresRestart = true)
+            @ConfigEntry(nameKey = "prop.playOnResourcesReload.name", descriptionKey = "prop.playOnResourcesReload.desc", comment = Reference.PLAY_ON_RESOURCES_RELOAD_COMMENT, requiresRestart = true)
             public boolean playOnResourcesReload = true;
-            @ConfigEntry(nameKey = "prop.nameResourcesReload.name", descriptionKey = "prop.nameResourcesReload.desc", comment = "Resource Location based name of the sound file to play when resources complete reloading.\n\nLook at the \"name\" config for more details.")
+            @ConfigEntry(nameKey = "prop.nameResourcesReload.name", descriptionKey = "prop.nameResourcesReload.desc", comment = Reference.NAME_RESOURCES_RELOAD_COMMENT)
             public String nameResourcesReload = "entity.experience_orb.pickup";
-            @ConfigEntry(nameKey = "prop.volumeResourcesReload.name", descriptionKey = "prop.volumeResourcesReload.desc", comment = "Volume of the sound (when resources complete reloading)")
+            @ConfigEntry(nameKey = "prop.volumeResourcesReload.name", descriptionKey = "prop.volumeResourcesReload.desc", comment = Reference.VOLUME_RESOURCES_RELOAD_COMMENT)
             @ConfigEntry.BoundedDouble(min = 0D, max = 10D)
             public double volumeResourcesReload = 0.25D;
-            @ConfigEntry(nameKey = "prop.pitchResourcesReload.name", descriptionKey = "prop.pitchResourcesReload.desc", comment = "Pitch of the sound (when resources complete reloading)")
+            @ConfigEntry(nameKey = "prop.pitchResourcesReload.name", descriptionKey = "prop.pitchResourcesReload.desc", comment = Reference.PITCH_RESOURCES_RELOAD_COMMENT)
             @ConfigEntry.BoundedDouble(min = 0D, max = 10D)
             public double pitchResourcesReload = 1D;
-            @ConfigEntry(nameKey = "prop.categoryResourcesReload.name", descriptionKey = "prop.categoryResourcesReload.desc", comment = "Sound category for the sound played when resources complete reloading. EG: \"ambient\" or \"music\". Defaults to \"master\" if Ding cannot find your category.")
+            @ConfigEntry(nameKey = "prop.categoryResourcesReload.name", descriptionKey = "prop.categoryResourcesReload.desc", comment = Reference.CATEGORY_RESOURCES_RELOAD_COMMENT)
             public String categoryResourcesReload = "master";
         }
     }

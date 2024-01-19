@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -23,7 +24,10 @@ public abstract class EventHandlerClient
     public abstract void hookIntoWorldTick();
     public abstract void hookIntoClientTick();
 
-    public abstract SoundEvent getSoundEvent(ResourceLocation rl);
+    public SoundEvent getSoundEvent(ResourceLocation rl)
+    {
+        return BuiltInRegistries.SOUND_EVENT.get(rl);
+    }
 
     public static void postInit()
     {

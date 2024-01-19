@@ -1,13 +1,14 @@
 modLoader="javafml"
-loaderVersion="[48,)" #forge version dep
-license="GNU Lesser General Public License v3.0"
+loaderVersion="${forge_loader_version_range}" #forge version dep
+license="${mod_license}"
 issueTrackerURL="https://github.com/iChun/Ding/issues"
 
 [[mods]]
-    modId="ding"
-    version="${file.jarVersion}" #mandatory
-    displayName="Ding"
+    modId="${mod_id}"
+    version="${mod_version}" #mandatory
+    displayName="${mod_name}"
     displayURL="https://ichun.me/mods/ding/"
+    logoFile="icon.png"
     authors="iChun"
     description='''
     Plays a sound once the client has loaded to the main menu, a server, or resources
@@ -19,15 +20,15 @@ issueTrackerURL="https://github.com/iChun/Ding/issues"
     # IMPORTANT NOTE: this is NOT an instruction as to which environments (CLIENT or DEDICATED SERVER) your mod loads on. Your mod should load (and maybe do nothing!) whereever it finds itself.
     displayTest="IGNORE_ALL_VERSION" # MATCH_VERSION is the default if nothing is specified (#optional)
 
-[[dependencies.ding]]
+[[dependencies.${mod_id}]]
     modId="forge"
     mandatory=true
-    versionRange="[48,)"
+    versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"
-[[dependencies.ding]]
+[[dependencies.${mod_id}]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.20.2,1.21)"
+    versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"

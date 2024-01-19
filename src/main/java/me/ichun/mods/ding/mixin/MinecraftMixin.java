@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MinecraftMixin
 {
     @Inject(method = "setOverlay", at = @At("HEAD"))
-    private void setOverlay(@Nullable Overlay overlay, CallbackInfo ci)
+    private void ding_setOverlay(@Nullable Overlay overlay, CallbackInfo ci)
     {
         if(!EventHandlerClient.postInit && Ding.modProxy != null && overlay == null && ((Minecraft)(Object)this).getOverlay() instanceof LoadingOverlay)
         {
