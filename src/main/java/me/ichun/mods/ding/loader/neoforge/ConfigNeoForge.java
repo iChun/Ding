@@ -3,9 +3,9 @@ package me.ichun.mods.ding.loader.neoforge;
 import me.ichun.mods.ding.common.core.Config;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-public class ConfigNeoforge extends Config
+public class ConfigNeoForge extends Config
 {
-    public ConfigNeoforge(ModConfigSpec.Builder builder)
+    public ConfigNeoForge(ModConfigSpec.Builder builder)
     {
         builder.comment("Configs related to how ding works").push("ding");
 

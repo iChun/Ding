@@ -5,9 +5,9 @@ import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TickEvent;
 
-public class EventHandlerClientNeoforge extends EventHandlerClient
+public class EventHandlerClientNeoForge extends EventHandlerClient
 {
-    public EventHandlerClientNeoforge()
+    public EventHandlerClientNeoForge()
     {
         loaderProxy = this;
     }

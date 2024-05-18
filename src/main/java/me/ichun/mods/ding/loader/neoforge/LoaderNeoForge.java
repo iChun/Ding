@@ -12,9 +12,9 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 @Mod(Ding.MOD_ID)
-public class LoaderNeoforge extends Ding
+public class LoaderNeoForge extends Ding
 {
-    public LoaderNeoforge(IEventBus modEventBus)
+    public LoaderNeoForge(IEventBus modEventBus)
     {
         modProxy = this;
 
@@ -35,7 +35,7 @@ public class LoaderNeoforge extends Ding
     private void initClient()
     {
         setupConfig();
-        new EventHandlerClientNeoforge();
+        new EventHandlerClientNeoForge();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -43,7 +43,7 @@ public class LoaderNeoforge extends Ding
     {
         //build the config
         ModConfigSpec.Builder configBuilder = new ModConfigSpec.Builder();
-        config = new ConfigNeoforge(configBuilder);
+        config = new ConfigNeoForge(configBuilder);
         //register the config. This loads the config for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, configBuilder.build(), MOD_ID + ".toml");
     }
