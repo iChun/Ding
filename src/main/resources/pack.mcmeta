@@ -3,6 +3,6 @@
       "description": {
          "text": "${mod_name}"
       },
-      "pack_format": ${minecraft_pack_format}
+      "pack_format": 32
    }
 }

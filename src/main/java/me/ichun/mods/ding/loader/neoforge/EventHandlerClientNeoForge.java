@@ -2,8 +2,9 @@ package me.ichun.mods.ding.loader.neoforge;
 
 import me.ichun.mods.ding.common.core.EventHandlerClient;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 public class EventHandlerClientNeoForge extends EventHandlerClient
 {
@@ -30,19 +31,13 @@ public class EventHandlerClientNeoForge extends EventHandlerClient
         promptToPlayWorld();
     }
 
-    public void onWorldTick(TickEvent.LevelTickEvent event)
+    public void onWorldTick(LevelTickEvent.Post event)
     {
-        if(event.phase == TickEvent.Phase.END)
-        {
-            onWorldTickEnd();
-        }
+        onWorldTickEnd();
     }
 
-    private void onClientTick(TickEvent.ClientTickEvent event)
+    private void onClientTick(ClientTickEvent.Post event)
     {
-        if(event.phase == TickEvent.Phase.END)
-        {
-            onClientTickEnd();
-        }
+        onClientTickEnd();
     }
 }

@@ -9,7 +9,8 @@
     "iChun"
   ],
   "contact": {
-    "homepage": "https://github.com/iChun/Ding",
+    "homepage": "https://www.curseforge.com/members/ohaiichun/projects",
+    "sources": "https://github.com/iChun/Ding",
     "issues": "https://github.com/iChun/Ding/issues"
   },
 
@@ -30,11 +31,19 @@
     "ding.mixins.json"
   ],
 
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/wvxVkmpt3g"
+      }
+    }
+  },
+
   "depends": {
     "fabricloader": ">=0.15.0",
     "fabric-api": "*",
-    "minecraft": ">=1.20.4 <1.21",
-    "java": ">=17",
-    "completeconfig-base": ">=2.5.2"
+    "minecraft": ">=1.20.6 <1.21",
+    "java": ">=21",
+    "ichunutil": "*"
   }
 }

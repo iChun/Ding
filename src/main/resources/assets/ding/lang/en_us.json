@@ -1,12 +1,12 @@
 {
   "config.ding.cat.ding.name": "Ding-related Configs",
   "config.ding.cat.ding.desc": "Configs related to how ding works",
-  "config.ding.cat.ding.load.name": "Minecraft Load-related Configs",
-  "config.ding.cat.ding.load.desc": "Configs for ding to trigger when the game loads",
-  "config.ding.cat.ding.world.name": "Loading a world-related Configs",
-  "config.ding.cat.ding.world.desc": "Configs for ding to trigger when the world loads after connecting to a server",
-  "config.ding.cat.ding.resourcesReload.name": "Resources reloaded-related Configs",
-  "config.ding.cat.ding.resourcesReload.desc": "Configs for ding to trigger when resources are reloaded",
+  "config.ding.cat.load.name": "Minecraft Load-related Configs",
+  "config.ding.cat.load.desc": "Configs for ding to trigger when the game loads",
+  "config.ding.cat.world.name": "Loading a world-related Configs",
+  "config.ding.cat.world.desc": "Configs for ding to trigger when the world loads after connecting to a server",
+  "config.ding.cat.resourcesReload.name": "Resources reloaded-related Configs",
+  "config.ding.cat.resourcesReload.desc": "Configs for ding to trigger when resources are reloaded",
 
   "config.ding.prop.playOnLoad.name": "Play Sound - Load",
   "config.ding.prop.playOnLoad.desc": "Play sound when the game loads.",

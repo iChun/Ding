@@ -1,7 +1,8 @@
 package me.ichun.mods.ding.loader.fabric;
 
 import me.ichun.mods.ding.common.Ding;
-import me.lortseam.completeconfig.data.Config;
+import me.ichun.mods.ding.common.core.Config;
+import me.ichun.mods.ichunutil.common.iChunUtil;
 import net.fabricmc.api.ClientModInitializer;
 
 public class LoaderFabricClient extends Ding
@@ -13,11 +14,7 @@ public class LoaderFabricClient extends Ding
         modProxy = this;
 
         //register config
-        ConfigFabric configFabric = new ConfigFabric();
-        config = configFabric;
-        configFabric.configInstance = new Config(MOD_ID, new String[]{}, configFabric);
-        configFabric.configInstance.load();
-        Runtime.getRuntime().addShutdownHook(new Thread(configFabric.configInstance::save));
+        config = iChunUtil.d().registerConfig(new Config());
 
         //init event handler
         new EventHandlerClientFabric();

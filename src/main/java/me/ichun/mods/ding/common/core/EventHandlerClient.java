@@ -36,18 +36,18 @@ public abstract class EventHandlerClient
         if(!played)
         {
             played = true;
-            if(Ding.config.playOnLoad.get())
+            if(Ding.config.playOnLoad)
             {
-                playSound(Ding.config.name.get(), Ding.config.volume.get().floatValue(), Ding.config.pitch.get().floatValue(), Ding.config.category.get());
+                playSound(Ding.config.name, (float)Ding.config.volume, (float)Ding.config.pitch, Ding.config.category);
             }
         }
 
-        if(Ding.config.playOnWorld.get())
+        if(Ding.config.playOnWorld)
         {
             loaderProxy.hookIntoWorldTick();
         }
 
-        if(Ding.config.playOnResourcesReload.get())
+        if(Ding.config.playOnResourcesReload)
         {
             loaderProxy.hookIntoClientTick();
         }
@@ -63,20 +63,20 @@ public abstract class EventHandlerClient
         if(playWorld && Minecraft.getInstance().player != null && (Minecraft.getInstance().player.tickCount > 20 || Minecraft.getInstance().isPaused()))
         {
             playWorld = false;
-            if(Ding.config.playOnWorld.get())
+            if(Ding.config.playOnWorld)
             {
-                playSound(Ding.config.nameWorld.get(), Ding.config.volumeWorld.get().floatValue(), Ding.config.pitchWorld.get().floatValue(), Ding.config.categoryWorld.get());
+                playSound(Ding.config.nameWorld, (float)Ding.config.volumeWorld, (float)Ding.config.pitchWorld, Ding.config.categoryWorld);
             }
         }
     }
 
     public static void onClientTickEnd()
     {
-        if(Ding.config.playOnResourcesReload.get())
+        if(Ding.config.playOnResourcesReload)
         {
             if(Minecraft.getInstance().getOverlay() == null && hasLoadingGui)
             {
-                playSound(Ding.config.nameResourcesReload.get(), Ding.config.volumeResourcesReload.get().floatValue(), Ding.config.pitchResourcesReload.get().floatValue(), Ding.config.categoryResourcesReload.get());
+                playSound(Ding.config.nameResourcesReload, (float)Ding.config.volumeResourcesReload, (float)Ding.config.pitchResourcesReload, Ding.config.categoryResourcesReload);
             }
             hasLoadingGui = Minecraft.getInstance().getOverlay() instanceof LoadingOverlay;
         }
