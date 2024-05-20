@@ -12,42 +12,33 @@ base {
 }
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
-
-	// Complete Config repos
+    mavenLocal()
 	maven {
-		url 'https://jitpack.io'
+		name = 'ParchmentMC'
+		url = 'https://maven.parchmentmc.org'
 	}
+
+	// ModMenu
 	maven {
 		url "https://maven.terraformersmc.com/"
-	}
-	maven {
-		url "https://maven.shedaniel.me/"
-	}
-	maven {
-		url "https://maven.siphalor.de/"
-	}
-	maven {
-		url "https://maven.isxander.dev/releases"
 	}
 }
 
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
+	mappings loom.layered() {
+		officialMojangMappings()
+		parchment("org.parchmentmc.data:parchment-${project.parchment_mc_version}:${project.parchment_version}@zip")
+	}
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	// Complete Config dep
+    
+	// Mod deps
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-	modImplementation "com.github.Lortseam.completeconfig:gui-cloth:${project.completeconfig_version}"
+	modImplementation "me.ichun:ichunutil:${project.ichunutil_version}:${project.minecraft_version}-fabric"
 }
 
 loom {
@@ -67,22 +58,31 @@ sourceSets {
 	}
 }
 
-processResources {
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
-	
+tasks.named('processResources', ProcessResources).configure {
 	exclude("META-INF/mods-forge.toml")
 	exclude("META-INF/accesstransformer-forge.cfg")
-	exclude("META-INF/mods-neoforge.toml")
+	exclude("META-INF/neoforge.mods.toml")
 	exclude("META-INF/accesstransformer-neoforge.cfg")
+
+    var replaceProperties = [
+            minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range, 
+            minecraft_resource_pack_format: minecraft_resource_pack_format, minecraft_data_pack_format: minecraft_data_pack_format,
+            forge_version         : forge_version, forge_version_range: forge_version_range, forge_loader_version_range: forge_loader_version_range,
+            neoforge_version         : neoforge_version, neoforge_version_range: neoforge_version_range, neoforge_loader_version_range: neoforge_loader_version_range,
+            mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version, mod_description : mod_description, 
+            mod_url_home: mod_url_home, mod_url_sources: mod_url_sources, mod_url_issues: mod_url_issues, mod_url_discord: mod_url_discord,
+            ichunutil_version: ichunutil_version, ichunutil_version_range: ichunutil_version_range
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['fabric.mod.json', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	it.options.release = 17
+	options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+	it.options.release = 21
 }
 
 java {
@@ -91,8 +91,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	//withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
@@ -103,19 +103,23 @@ jar {
 
 // configure the maven publication
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
-
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
-	}
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId "${mod_id}"
+            version  "${mod_version}"
+            artifact(remapJar)
+            {
+                classifier "${project.minecraft_version}-fabric"
+            }
+            //from components.java
+        }
+    }
+    
+    repositories {
+        maven {
+            url "file://${project.projectDir}/repo"
+        }
+    }
 }
 
 apply from: 'gradle/modpublisher.gradle'
@@ -145,11 +149,11 @@ publisher {
     // Modrinth Dependencies.
     // Accepts a slug or id
     modrinthDepends {
-        required "P7dR8mSH", "GtqG8z1h" //Fabric API and CompleteConfig
+        required "P7dR8mSH", "W6ROj0Hl" //Fabric API and iChunUtil
     }
 
     // Curse Dependencies
     curseDepends {
-        required "fabric-api", "completeconfig" //Fabric API and CompleteConfig
+        required "fabric-api", "ichunutil" //Fabric API and iChunUtil
     }
 }

@@ -33,21 +33,9 @@ repositories {
 		url = 'https://cursemaven.com'
 	}
 
-	// Complete Config repos
-	maven {
-		url 'https://jitpack.io'
-	}
+	// ModMenu
 	maven {
 		url "https://maven.terraformersmc.com/"
-	}
-	maven {
-		url "https://maven.shedaniel.me/"
-	}
-	maven {
-		url "https://maven.siphalor.de/"
-	}
-	maven {
-		url "https://maven.isxander.dev/releases"
 	}
 }
 
@@ -65,28 +53,25 @@ dependencies {
 
 	modImplementation "curse.maven:lazydfu-433518:3821870" //Lazy DFU for 1.19+
 
-	// Complete Config dep
-	// modImplementation "com.gitlab.Lortseam:completeconfig:base:${project.completeconfig_version}"
-	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-	modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}"
-	modImplementation "com.github.Lortseam.completeconfig:gui-cloth:${project.completeconfig_version}"
-
 	// Forge deps. For dependency libraries required at compile, you'll have to add an implementation for them as well.
 	compileOnly "net.minecraftforge:forge:${project.forge_version}:universal"
 	compileOnly "net.minecraftforge:javafmllanguage:${project.forge_version}"
 	compileOnly "net.minecraftforge:fmlcore:${project.forge_version}"
 	compileOnly "net.minecraftforge:fmlloader:${project.forge_version}"
 	compileOnly "net.minecraftforge:eventbus:${project.forge_event_bus_version}"
-	compileOnly "net.minecraftforge:mergetool:${project.forge_merge_tool_version}:api"
+	compileOnly "net.minecraftforge:mergetool-api:${project.forge_merge_tool_api_version}"
 
-	// Neoforge deps
-	compileOnly "net.neoforged:neoforge:${project.neoforge_version}:universal"
+	// NeoForge deps
+	compileOnly ("net.neoforged:neoforge:${project.neoforge_version}:universal"){
+		exclude group: "cpw.mods", module: "modlauncher"
+	}
 
 	// Common Forge deps
 	compileOnly "com.electronwill.night-config:core:${project.nightconfig_core_version}"
 
 	// Mod deps
-	implementation 'com.moandjiezana.toml:toml4j:0.7.2' // MIT - Fabric only
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modImplementation "me.ichun:ichunutil:${project.ichunutil_version}:${project.minecraft_version}-fabric"
 }
 
 //If there's mixins
@@ -96,17 +81,31 @@ dependencies {
 //	}
 //}
 
-processResources {
-	inputs.property "version", project.version
+tasks.named('processResources', ProcessResources).configure {
+	exclude("META-INF/mods-forge.toml")
+	exclude("META-INF/accesstransformer-forge.cfg")
+	exclude("META-INF/neoforge.mods.toml")
+	exclude("META-INF/accesstransformer-neoforge.cfg")
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+    var replaceProperties = [
+            minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range, 
+            minecraft_resource_pack_format: minecraft_resource_pack_format, minecraft_data_pack_format: minecraft_data_pack_format,
+            forge_version         : forge_version, forge_version_range: forge_version_range, forge_loader_version_range: forge_loader_version_range,
+            neoforge_version         : neoforge_version, neoforge_version_range: neoforge_version_range, neoforge_loader_version_range: neoforge_loader_version_range,
+            mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version, mod_description : mod_description, 
+            mod_url_home: mod_url_home, mod_url_sources: mod_url_sources, mod_url_issues: mod_url_issues, mod_url_discord: mod_url_discord,
+            ichunutil_version: ichunutil_version, ichunutil_version_range: ichunutil_version_range
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['fabric.mod.json', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	it.options.release = 17
+	options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+	it.options.release = 21
 }
 
 java {
@@ -115,8 +114,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {

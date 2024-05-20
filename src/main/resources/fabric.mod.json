@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
   "id": "ding",
-  "version": "${version}",
+  "version": "${mod_version}",
 
   "name": "Ding",
-  "description": "Plays a sound once the client has loaded to the main menu, a server, or resources",
+  "description": "${mod_description}",
   "authors": [
     "iChun"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/members/ohaiichun/projects",
-    "sources": "https://github.com/iChun/Ding",
-    "issues": "https://github.com/iChun/Ding/issues"
+    "homepage": "${mod_url_home}",
+    "sources": "${mod_url_sources}",
+    "issues": "${mod_url_issues}"
   },
 
-  "license": "GNU Lesser General Public License v3.0",
+  "license": "${mod_license}",
   "icon": "icon.png",
 
   "environment": "client",
@@ -34,7 +34,7 @@
   "custom": {
     "modmenu": {
       "links": {
-        "modmenu.discord": "https://discord.gg/wvxVkmpt3g"
+        "modmenu.discord": "${mod_url_discord}"
       }
     }
   },
@@ -44,6 +44,6 @@
     "fabric-api": "*",
     "minecraft": ">=1.20.6 <1.21",
     "java": ">=21",
-    "ichunutil": "*"
+    "ichunutil": ">=1.0.0"
   }
 }

@@ -1,18 +1,17 @@
 modLoader="javafml"
 loaderVersion="${forge_loader_version_range}" #forge version dep
 license="${mod_license}"
-issueTrackerURL="https://github.com/iChun/Ding/issues"
+issueTrackerURL="${mod_url_issues}"
 
 [[mods]]
     modId="${mod_id}"
     version="${mod_version}" #mandatory
     displayName="${mod_name}"
-    displayURL="https://ichun.me/mods/ding/"
+    displayURL="${mod_url_home}"
     logoFile="icon.png"
     authors="iChun"
-    description='''
-    Plays a sound once the client has loaded to the main menu, a server, or resources
-    '''
+    description="${mod_description}"
+
     # MATCH_VERSION means that your mod will cause a red X if the versions on client and server differ. This is the default behaviour and should be what you choose if you have server and client elements to your mod.
     # IGNORE_SERVER_VERSION means that your mod will not cause a red X if it's present on the server but not on the client. This is what you should use if you're a server only mod.
     # IGNORE_ALL_VERSION means that your mod will not cause a red X if it's present on the client or the server. This is a special case and should only be used if your mod has no server component.
@@ -30,5 +29,11 @@ issueTrackerURL="https://github.com/iChun/Ding/issues"
     modId="minecraft"
     mandatory=true
     versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.${mod_id}]]
+    modId="ichunutil"
+    mandatory=true
+    versionRange="${ichunutil_version_range}"
     ordering="NONE"
     side="BOTH"
