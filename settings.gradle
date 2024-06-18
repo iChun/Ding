@@ -1,12 +1,12 @@
 pluginManagement {
-    repositories {
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
-		maven { 
-            name = 'Forge'
-			url = 'https://maven.minecraftforge.net/' 
+	repositories {
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+		maven {
+			name = 'Forge'
+			url = 'https://maven.minecraftforge.net/'
 		}
 		maven {
 			name = 'NeoForge'
@@ -20,15 +20,70 @@ pluginManagement {
 			name = 'Spongepowered (Mixin)'
 			url = 'https://repo.spongepowered.org/repository/maven-public/'
 		}
-        maven {
+		maven {
 			name = 'ModPublisher https://github.com/firstdarkdev/modpublisher'
-            url "https://maven.firstdark.dev/releases"
-        }
-        mavenCentral()
-        gradlePluginPortal()
-    }
+			url "https://maven.firstdark.dev/releases"
+		}
+		mavenCentral()
+		gradlePluginPortal()
+	}
 }
 
 plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+	id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
+rootProject.name = "${mod_id}"
+
+if("${mod_id}".toString().equals("all")) { //it's a composite build. Remember to change mod_id, mod_name, archives_base_name
+	include 'common'
+	include 'fabric'
+	include 'forge' //Required because post-sync tasks by Forge subprojects fail otherwise
+	//include 'neoforge' //If you would like neoforge runs, uncomment this
+
+	gradle.ext {
+		//Comment/delete as necessary
+		projectSubMods = [
+				"iChunUtil", //All mods in this composite build that depend on iChunUtil and uses its plugin should have iChunUtil
+				"BetterThanBunnies",
+				"BetterThanLlamas",
+				"DeathCounter",
+				"Ding",
+				"LetSleepingDogsLie",
+				"LimitedLives",
+				"PartyParrots",
+				"ServerPause"
+		]
+	}
+
+	gradle.ext.projectSubMods.forEach { mod ->
+		if(file("../${mod}").exists()) {
+			includeBuild("../${mod}") {
+				def modIdLowerCase = "${mod}".toString().toLowerCase(Locale.US)
+				name = modIdLowerCase
+				dependencySubstitution {
+					//I won't know the mod version. We special case for composite builds anyway
+					if(file("../${mod}/api").exists()) {
+						substitute module("me.ichun.mods:${modIdLowerCase}:${minecraft_version}-api") using project(":api")
+					}
+					substitute module("me.ichun.mods:${modIdLowerCase}:${minecraft_version}-common") using project(":common")
+					substitute module("me.ichun.mods:${modIdLowerCase}:${minecraft_version}-fabric") using project(":fabric")
+					substitute module("me.ichun.mods:${modIdLowerCase}:${minecraft_version}-forge") using project(":forge")
+					substitute module("me.ichun.mods:${modIdLowerCase}:${minecraft_version}-neoforge") using project(":neoforge")
+				}
+			}
+		}
+		else {
+			println "${mod} defined as included build in composite build but directory cannot be found!"
+		}
+	}
+}
+else {
+	if(file("${rootDir}/api").exists()) {//Check if API folder exists, if it does, include it
+		include 'api'
+	}
+	include 'common'
+	include 'fabric'
+	include 'forge'
+	include 'neoforge'
 }
