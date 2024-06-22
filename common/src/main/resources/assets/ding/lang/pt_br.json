@@ -2,7 +2,7 @@
     "config.ding.cat.ding.name": "Configurações relacionadas a Ding",
     "config.ding.cat.ding.desc": "Configurações relacionadas a como o ding funciona",
     "config.ding.prop.name.name": "(Carga) Nome do som",
-    "config.ding.prop.name.desc": "Nome baseado em localização de recursos do arquivo de som para reproduzir quando o Minecraft terminar de carregar.\nEG: \"ui.button.click\" ou \"entity.experience_orb.pickup\"\n\nIsso também pode ser um som moda se o mod for instalado.\nEG: modname:modsound.boing\n\nSe você quiser usar sons externos, considere olhar para o mod de recursos adicionais",
+    "config.ding.prop.name.desc": "Nome baseado em localização de recursos do arquivo de som para reproduzir quando o Minecraft terminar de carregar.\nEG: \"ui.button.click\" ou \"entity.experience_orb.pickup\"\n\nIsso também pode ser um som moda se o mod for instalado.\nEG: modname:modsound.boing\n\nSe você quiser usar sons externos, considere dar uma olhada nos mods que adicionam recursos",
     "config.ding.prop.pitch.name": "(Carga) tom de som",
     "config.ding.prop.pitch.desc": "Pedro do som (quando o Minecraft carrega)",
     "config.ding.prop.category.name": "(Carga) categoria de som",

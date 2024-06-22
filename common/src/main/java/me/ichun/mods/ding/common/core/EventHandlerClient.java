@@ -19,7 +19,6 @@ public abstract class EventHandlerClient
 
     private static boolean hasInit;
     private static boolean playWorld;
-    private static boolean hasLoadingGui;
 
     public static boolean init()
     {

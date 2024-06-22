@@ -2,7 +2,7 @@
   "config.ding.cat.ding.name": "Конфигурации, связанные с модом Ding.",
   "config.ding.cat.ding.desc": "Конфигурации, связанные с тем, как работает мод Ding.",
   "config.ding.prop.name.name": "(Загрузка) название звука",
-  "config.ding.prop.name.desc": "Местоположение ресурса, основанное на название звукового файла для воспроизведения, когда загрузка Minecraft завершается.\nНАПРИМЕР: \"ui.button.click\" или \"entity.experience_orb.pickup\"\n\nТакже это может быть звук из другого мода, если он установлен.\nНАПРИМЕР: modname:modsound.boing\n\nЕсли ты хочешь использовать посторонние звуки, рассмотри мод Additional Resources.",
+  "config.ding.prop.name.desc": "Местоположение ресурса, основанное на название звукового файла для воспроизведения, когда загрузка Minecraft завершается.\nНАПРИМЕР: \"ui.button.click\" или \"entity.experience_orb.pickup\"\n\nТакже это может быть звук из другого мода, если он установлен.\nНАПРИМЕР: modname:modsound.boing\n\nЕсли вы хотите использовать внешние звуки, подумайте о модах, которые добавляют ресурсы.",
   "config.ding.prop.pitch.name": "(Загрузка) Высота тоны звука",
   "config.ding.prop.pitch.desc": "Высота тоны звука (когда загружается Minecraft)",
   "config.ding.prop.category.name": "(Загрузка) Категория звука",
