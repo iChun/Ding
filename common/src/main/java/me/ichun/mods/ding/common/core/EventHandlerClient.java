@@ -38,6 +38,7 @@ public abstract class EventHandlerClient
 
         if(Ding.config.playOnWorld)
         {
+            iChunUtil.eC().registerOnClientConnectListener(client -> promptToPlayWorld());
             loaderProxy.hookIntoWorldTick();
         }
 
