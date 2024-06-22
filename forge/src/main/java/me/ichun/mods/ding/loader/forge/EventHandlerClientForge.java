@@ -19,12 +19,6 @@ public class EventHandlerClientForge extends EventHandlerClient
         MinecraftForge.EVENT_BUS.addListener(this::onWorldTick);
     }
 
-    @Override
-    public void hookIntoClientTick()
-    {
-        MinecraftForge.EVENT_BUS.addListener(this::onClientTick);
-    }
-
     public void onClientLoggedInEvent(ClientPlayerNetworkEvent.LoggingIn event)
     {
         promptToPlayWorld();
@@ -33,10 +27,5 @@ public class EventHandlerClientForge extends EventHandlerClient
     public void onWorldTick(TickEvent.LevelTickEvent.Post event)
     {
         onWorldTickEnd();
-    }
-
-    private void onClientTick(TickEvent.ClientTickEvent.Post event)
-    {
-        onClientTickEnd();
     }
 }

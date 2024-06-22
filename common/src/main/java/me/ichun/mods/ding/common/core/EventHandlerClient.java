@@ -22,7 +22,6 @@ public abstract class EventHandlerClient
     private static boolean hasLoadingGui;
 
     public abstract void hookIntoWorldTick();
-    public abstract void hookIntoClientTick();
 
     public static void postInit()
     {
@@ -44,7 +43,7 @@ public abstract class EventHandlerClient
 
         if(Ding.config.playOnResourcesReload)
         {
-            loaderProxy.hookIntoClientTick();
+            iChunUtil.eC().registerClientTickEndListener(client -> onClientTickEnd());
         }
     }
 

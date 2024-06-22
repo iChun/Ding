@@ -21,12 +21,6 @@ public class EventHandlerClientFabric extends EventHandlerClient
         ClientTickEvents.END_WORLD_TICK.register(this::onWorldTick);
     }
 
-    @Override
-    public void hookIntoClientTick()
-    {
-        ClientTickEvents.END_CLIENT_TICK.register(this::onClientTick);
-    }
-
     public void onClientConnection(ClientHandshakePacketListenerImpl handler, Minecraft client)
     {
         promptToPlayWorld();
@@ -35,10 +29,5 @@ public class EventHandlerClientFabric extends EventHandlerClient
     public void onWorldTick(ClientLevel level)
     {
         onWorldTickEnd();
-    }
-
-    public void onClientTick(Minecraft client)
-    {
-        onClientTickEnd();
     }
 }
