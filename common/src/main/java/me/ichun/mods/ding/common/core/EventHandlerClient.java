@@ -1,11 +1,11 @@
 package me.ichun.mods.ding.common.core;
 
 import me.ichun.mods.ding.common.Ding;
+import me.ichun.mods.ichunutil.common.iChunUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -23,11 +23,6 @@ public abstract class EventHandlerClient
 
     public abstract void hookIntoWorldTick();
     public abstract void hookIntoClientTick();
-
-    public SoundEvent getSoundEvent(ResourceLocation rl)
-    {
-        return BuiltInRegistries.SOUND_EVENT.get(rl);
-    }
 
     public static void postInit()
     {
@@ -85,7 +80,7 @@ public abstract class EventHandlerClient
     public static void playSound(String name, float volume, float pitch, String categoryName)
     {
         ResourceLocation rl = new ResourceLocation(name);
-        SoundEvent sound = loaderProxy.getSoundEvent(rl);
+        SoundEvent sound = iChunUtil.d().registrySoundEvents(rl);
         SoundSource category = getCategoryByName(categoryName);
 
         //if the sound doesn't exist we play a missing sound
