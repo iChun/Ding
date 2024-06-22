@@ -29,13 +29,8 @@ public class LoaderNeoForge extends Ding
     @OnlyIn(Dist.CLIENT)
     private void initClient(IEventBus modEventBus)
     {
-        setupConfig(modEventBus);
-        new EventHandlerClientNeoForge();
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void setupConfig(IEventBus modEventBus)
-    {
         Ding.config = iChunUtil.d().registerConfig(new Config(), modEventBus);
+
+        new EventHandlerClientNeoForge();
     }
 }
