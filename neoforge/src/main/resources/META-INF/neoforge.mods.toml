@@ -19,9 +19,6 @@ issueTrackerURL="${mod_url_issues}"
     # IMPORTANT NOTE: this is NOT an instruction as to which environments (CLIENT or DEDICATED SERVER) your mod loads on. Your mod should load (and maybe do nothing!) whereever it finds itself.
     displayTest="IGNORE_ALL_VERSION" # MATCH_VERSION is the default if nothing is specified (#optional)
 
-[[mixins]]
-    config="${mod_id}.mixins.json"
-
 [[dependencies.${mod_id}]]
     modId="neoforge"
     type="required"

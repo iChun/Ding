@@ -27,10 +27,6 @@
     ]
   },
 
-  "mixins": [
-    "ding.mixins.json"
-  ],
-
   "custom": {
     "modmenu": {
       "links": {

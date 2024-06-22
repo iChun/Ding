@@ -18,6 +18,7 @@ public class Config extends ConfigBase
     public String category = "master";
 
     @CategoryDivider(name = "world")
+    @Prop(needsRestart = true)
     public boolean playOnWorld = false;
     public String nameWorld = "entity.experience_orb.pickup";
     @Prop(min = 0D, max = 10D)

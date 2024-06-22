@@ -4,76 +4,71 @@ import me.ichun.mods.ding.common.Ding;
 import me.ichun.mods.ichunutil.common.iChunUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.LoadingOverlay;
+import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class EventHandlerClient
 {
     //This is here instead of normally being in the mod class because it is only classloaded when called by the client.
     public static EventHandlerClient loaderProxy;
 
-    public static boolean postInit;
-
-    private static boolean played;
+    private static boolean hasInit;
     private static boolean playWorld;
     private static boolean hasLoadingGui;
 
-    public abstract void hookIntoWorldTick();
-
-    public static void postInit()
+    public static boolean init()
     {
-        postInit = true;
-
-        if(!played)
+        if(!hasInit)
         {
-            played = true;
+            hasInit = true;
             if(Ding.config.playOnLoad)
             {
                 playSound(Ding.config.name, (float)Ding.config.volume, (float)Ding.config.pitch, Ding.config.category);
             }
+
+            if(Ding.config.playOnWorld)
+            {
+                iChunUtil.eC().registerOnClientConnectListener(client -> promptToPlayWorld());
+                iChunUtil.eC().registerClientTickEndListener(client -> onClientTickEnd());
+            }
+
+            return true;
         }
 
-        if(Ding.config.playOnWorld)
-        {
-            iChunUtil.eC().registerOnClientConnectListener(client -> promptToPlayWorld());
-            loaderProxy.hookIntoWorldTick();
-        }
+        return false;
+    }
 
-        if(Ding.config.playOnResourcesReload)
+    public static void onOverlayChange(@Nullable Overlay currentOverlay, @Nullable Overlay newOverlay)
+    {
+        if(currentOverlay instanceof LoadingOverlay && newOverlay == null)
         {
-            iChunUtil.eC().registerClientTickEndListener(client -> onClientTickEnd());
+            if(!init() && Ding.config.playOnResourcesReload) //we have loaded and played the sound before - check if we're reloading resources
+            {
+                playSound(Ding.config.nameResourcesReload, (float)Ding.config.volumeResourcesReload, (float)Ding.config.pitchResourcesReload, Ding.config.categoryResourcesReload);
+            }
         }
     }
 
     public static void promptToPlayWorld()
     {
-        playWorld = true;
-    }
-
-    public static void onWorldTickEnd()
-    {
-        if(playWorld && Minecraft.getInstance().player != null && (Minecraft.getInstance().player.tickCount > 20 || Minecraft.getInstance().isPaused()))
+        if(Ding.config.playOnWorld)
         {
-            playWorld = false;
-            if(Ding.config.playOnWorld)
-            {
-                playSound(Ding.config.nameWorld, (float)Ding.config.volumeWorld, (float)Ding.config.pitchWorld, Ding.config.categoryWorld);
-            }
+            playWorld = true;
         }
     }
 
     public static void onClientTickEnd()
     {
-        if(Ding.config.playOnResourcesReload)
+        Minecraft mc = Minecraft.getInstance();
+        if(playWorld && mc.player != null && (mc.player.tickCount > 20 || mc.isPaused()))
         {
-            if(Minecraft.getInstance().getOverlay() == null && hasLoadingGui)
-            {
-                playSound(Ding.config.nameResourcesReload, (float)Ding.config.volumeResourcesReload, (float)Ding.config.pitchResourcesReload, Ding.config.categoryResourcesReload);
-            }
-            hasLoadingGui = Minecraft.getInstance().getOverlay() instanceof LoadingOverlay;
+            playWorld = false;
+            playSound(Ding.config.nameWorld, (float)Ding.config.volumeWorld, (float)Ding.config.pitchWorld, Ding.config.categoryWorld);
         }
     }
 

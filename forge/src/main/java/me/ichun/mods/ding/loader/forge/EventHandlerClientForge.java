@@ -1,24 +1,20 @@
 package me.ichun.mods.ding.loader.forge;
 
 import me.ichun.mods.ding.common.core.EventHandlerClient;
+import me.ichun.mods.ichunutil.loader.forge.event.client.OverlayChangeEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
 
 public class EventHandlerClientForge extends EventHandlerClient
 {
     public EventHandlerClientForge()
     {
         loaderProxy = this;
+
+        MinecraftForge.EVENT_BUS.addListener(this::onOverlayChangeEvent);
     }
 
-    @Override
-    public void hookIntoWorldTick()
+    private void onOverlayChangeEvent(OverlayChangeEvent event)
     {
-        MinecraftForge.EVENT_BUS.addListener(this::onWorldTick);
-    }
-
-    public void onWorldTick(TickEvent.LevelTickEvent.Post event)
-    {
-        onWorldTickEnd();
+        onOverlayChange(event.getCurrentOverlay(), event.getNewOverlay());
     }
 }
