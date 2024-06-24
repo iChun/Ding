@@ -2,9 +2,11 @@ package me.ichun.mods.ding.loader.forge;
 
 import me.ichun.mods.ding.common.Ding;
 import me.ichun.mods.ding.common.core.Config;
+import me.ichun.mods.ichunutil.client.gui.config.WorkspaceConfigs;
 import me.ichun.mods.ichunutil.common.iChunUtil;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -30,5 +32,7 @@ public class LoaderForge extends Ding
         Ding.config = iChunUtil.d().registerConfig(new Config());
 
         new EventHandlerClientForge();
+
+        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(WorkspaceConfigs::new));
     }
 }
