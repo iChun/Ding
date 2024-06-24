@@ -23,7 +23,7 @@
       "me.ichun.mods.ding.loader.fabric.LoaderFabricClient"
     ],
     "modmenu": [
-      "me.ichun.mods.ding.loader.fabric.ModMenuIntegration"
+      "me.ichun.mods.ichunutil.loader.fabric.client.ModMenuIntegration"
     ]
   },
 
