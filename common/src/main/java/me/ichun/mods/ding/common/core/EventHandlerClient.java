@@ -73,7 +73,7 @@ public abstract class EventHandlerClient
 
     public static void playSound(String name, float volume, float pitch, String categoryName)
     {
-        ResourceLocation rl = new ResourceLocation(name);
+        ResourceLocation rl = ResourceLocation.parse(name);
         SoundEvent sound = iChunUtil.d().registrySoundEvents(rl);
         SoundSource category = getCategoryByName(categoryName);
 
