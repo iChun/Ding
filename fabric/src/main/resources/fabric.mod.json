@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "ding",
+  "version": "${mod_version}",
+
+  "name": "Ding",
+  "description": "${mod_description}",
+  "authors": [
+    "iChun"
+  ],
+  "contact": {
+    "homepage": "${mod_url_home}",
+    "sources": "${mod_url_sources}",
+    "issues": "${mod_url_issues}"
+  },
+
+  "license": "${mod_license}",
+  "icon": "icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "me.ichun.mods.ding.loader.fabric.LoaderFabricClient"
+    ],
+    "modmenu": [
+      "me.ichun.mods.ichunutil.loader.fabric.client.ModMenuIntegration"
+    ]
+  },
+
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "${mod_url_discord}"
+      }
+    }
+  },
+
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "fabric-api": "*",
+    "minecraft": ">=1.19 <=1.19.2",
+    "java": ">=17",
+    "ichunutil": ">=1.0.0"
+  }
+}
