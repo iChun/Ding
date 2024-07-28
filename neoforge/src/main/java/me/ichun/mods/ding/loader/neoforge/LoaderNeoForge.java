@@ -12,7 +12,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
-@Mod(Ding.MOD_ID)
+@Mod(value = Ding.MOD_ID, dist = Dist.CLIENT)
 public class LoaderNeoForge extends Ding
 {
     public LoaderNeoForge(IEventBus modEventBus)
