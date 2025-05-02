@@ -21,9 +21,6 @@
   "entrypoints": {
     "client": [
       "me.ichun.mods.ding.loader.fabric.LoaderFabricClient"
-    ],
-    "modmenu": [
-      "me.ichun.mods.ichunutil.loader.fabric.client.ModMenuIntegration"
     ]
   },
 
